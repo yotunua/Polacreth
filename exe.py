@@ -57,7 +57,7 @@ async def on_message(message):
             f"```xml\nTime : {nextTime.split('+')[0]}\nContest : {contestName}\nTime Required : {timeRequired}\nRated : {rated}\n```")
 
     # wiki research sys
-    if messageArgs[0] == "wiki":
+    if messageArgs[0] == "/wiki":
         # help for wiki
         if len(messageArgs) == 1:
             await message.channel.send("usage: /wiki [調べたい単語]")
