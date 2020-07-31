@@ -3,6 +3,7 @@ import time
 import datetime
 from bs4 import BeautifulSoup
 from urllib import request
+import wikipedia
 import secret
 
 client = discord.Client()
@@ -12,7 +13,6 @@ client = discord.Client()
 @client.event
 async def on_ready():
     print("Its ok")
-
 
 # receive message
 @client.event
@@ -53,5 +53,34 @@ async def on_message(message):
 
         await message.channel.send(f"```xml\nTime : {nextTime.split('+')[0]}\nContest : {contestName}\nTime Required : {timeRequired}\nRated : {rated}\n```")
 
+    # wiki research sys
+    if message.content.startswith("/wiki"):
+        messageArgs = message.content.split()
+        # help for wiki
+        if len(messageArgs) == 1:
+            await message.channel.send("usage: /wiki [調べたい単語]")
+            return
+
+        # 言語設定
+        wikipedia.set_lang("ja")
+        searchResponse = wikipedia.search(messageArgs[1])
+        if not searchResponse:
+            await message.channel.send("検索結果が見つかりませんでした。キーワードを変更してください")
+            return
+
+        try:
+            result = wikipedia.summary(messageArgs[1], sentences=3)
+            page = wikipedia.page(messageArgs[1])
+            resultUrl = page.url
+            await message.channel.send(f"Results:\n"
+                                   "```\n"
+                                   f"{result}\n"
+                                   f"```\n"
+                                   f"\n"
+                                   f"{resultUrl}")
+
+        except wikipedia.exceptions.DisambiguationError as e:
+            await message.channel.send("キーワードが抽象的であるため、検索結果を絞ることができませんでした。\n"
+                                       "キーワードを変更してください。")
 
 client.run(secret.TOKEN)
