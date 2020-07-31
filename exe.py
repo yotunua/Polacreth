@@ -31,7 +31,8 @@ async def on_message(message):
                                    ">   /atnext ... AtCoderの次回コンテスト予定を表示\n"
                                    "> -----------------\n"
                                    "> updated on 2020/07/31\n"
-                                   "> by 48clovA\n")
+                                   "> by 48clovA\n"
+                                   "")
 
     # return date
     if message.content == "/date":
